@@ -6,4 +6,4 @@ Flutter bluetooth protocol project.
 
 This project is an example app for connecting bluetooth sensors.
 
-I used flutter_blue package.
+I used flutter_blue, get package.
