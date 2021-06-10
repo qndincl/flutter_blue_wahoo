@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_project/binding.dart';
-import 'package:flutter_blue_project/controller/bluetooth_controller.dart';
+import 'package:flutter_blue_project/view_model/bluetooth_controller.dart';
 import 'package:flutter_blue_project/screen/blueScreen.dart';
 import 'package:flutter_blue_project/screen/detail.dart';
 import 'package:flutter_blue_project/screen/loading.dart';
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put<BluetoothController>(BluetoothController());
+    // Get.put(BluetoothController());
 
     return GetMaterialApp(
       title: 'Flutter Blue demo',
@@ -25,17 +25,16 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => BlueScreen()),
+        GetPage(name: '/', page: () => BlueScreen(), binding: HomeBinding()),
         GetPage(
-          name: '/detail',
-          page: () => DetailScreen(),
-        ),
+            name: '/detail',
+            page: () => DetailScreen(),
+            binding: HomeBinding()),
         GetPage(
-          name: '/loading',
-          page: () => LoadingScreen(),
-        ),
+            name: '/loading',
+            page: () => LoadingScreen(),
+            binding: HomeBinding()),
       ],
-      home: BlueScreen(),
     );
   }
 }
