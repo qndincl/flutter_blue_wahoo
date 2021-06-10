@@ -1,4 +1,4 @@
-import 'package:flutter_blue_project/controller/bluetooth_controller.dart';
+import 'package:flutter_blue_project/view_model/bluetooth_controller.dart';
 import 'package:get/get.dart';
 
 class HomeBinding implements Bindings {
