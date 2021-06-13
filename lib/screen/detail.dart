@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:flutter_blue_project/controller/bluetooth_controller.dart';
-import 'package:flutter_blue_project/util/bluetooth_analysis.dart';
+import 'package:flutter_blue_project/model/wheel_model.dart';
+import 'package:flutter_blue_project/view_model/bluetooth_controller.dart';
 import 'package:get/get.dart';
 import 'package:hex/hex.dart';
 
@@ -21,12 +21,14 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   BluetoothController _bluetoothController = Get.find<BluetoothController>();
-  BluetoothAnalysis bluetoothAnalysis = BluetoothAnalysis();
+  // BluetoothAnalysis bluetoothAnalysis = BluetoothAnalysis();
+  WheelModel wheelModel;
   var temp = Get.arguments ?? "";
 
   int wheel_rev = 0;
   int wheel_ms = 0;
   void velocityData(List<int> sensorData) {
+    //!안씀 analysis에서 처리함
     print("temp $temp");
     List<int> rev = sensorData;
     if (rev.length == 0) {
@@ -82,65 +84,110 @@ class _DetailScreenState extends State<DetailScreen> {
     // print("revSum $revSum");
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
+// List<int> batteryCheck(List<int> sensorBatteryData){
+//   List<int> rev = sensorBatteryData;
+//     if (rev.length == 0) {
+//       return sensorBatteryData;
+//     }
+
+// }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text("detail"),
+        ),
         body: Obx(
           () {
+            List<WheelModel> wheelDataList = _bluetoothController.wheelDataList;
             List<List<int>> sensorData = (_bluetoothController.sensorData);
+            List<double> wheelVelocity = _bluetoothController.saveResult;
+//toStringAsFixed(1)
+            var wheelVM = _bluetoothController.wheelVelocityM;
+            var wheelVKm = _bluetoothController.wheelVelocityKm;
+            var wheelDistence = _bluetoothController.wheelDistence;
+            // var wheelVs = wheelVec?.value?.toDouble() ?? 0;
+            var wheelVMs =
+                wheelVM?.value?.toStringAsFixed(1); //! 최종 속도값, m/s 출력되는 값
+            var wheelVKmh =
+                wheelVKm?.value?.toStringAsFixed(1); //! 최종 속도값, km/h 출력되는 값
+            var wheelDis = wheelDistence?.value?.toStringAsFixed(2);
+            // var wheelVMs = wheelVM?.value?.toInt() ?? 0; //! 최종 속도값, m/s 출력되는 값
+            // var wheelVKmh =
+            //     wheelVKm?.value?.toInt() ?? 0; //! 최종 속도값, km/h 출력되는 값
 
-            bluetoothAnalysis.analysis(sensorData.last ?? []);
+            // bluetoothAnalysis.analysis(sensorData.last ?? []);
 
-            return ListView.builder(
-                itemCount: sensorData.length,
-                itemBuilder: (ctx, index) {
-                  return ListTile(
-                    title: Column(
-                      children: [
-                        Center(
-                            child: Text(
-                          "Get",
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
-                        )),
-                        Divider(thickness: 8.0),
-                        Center(
-                            child: Text(
-                          // "Get.arguments last  ${temp.last}",
-                          "sensorData last  ${sensorData.last ?? ""}",
-                          style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: 15.0,
-                              fontWeight: FontWeight.bold),
-                        )),
-                        SizedBox(height: 20.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("Wheel_Rev : ${bluetoothAnalysis.wheelRev}"),
-                            // Text("  "),
-                            SizedBox(
-                              width: 10.0,
-                            ),
-                            Text(
-                                "Wheel_Last_event : ${bluetoothAnalysis.wheelMs}"),
-                          ],
-                        ),
-                        // FlatButton(
-                        //     onPressed: () {
-                        //       velocityData();
-                        //     },
-                        //     child: Text("thisButton"))
-                      ],
-                    ),
-                  );
-                });
+            // wheelModel = WheelModel.fromHex(sensorData.last ?? []);
+
+            //?test
+            // return ListView.builder(
+            //     itemCount: wheelDataList.length,
+            //     itemBuilder: (_, index) {
+            //       return Container(
+            //         child: Text(wheelDataList[index].wheelRev.toString()),
+            //       );
+            //     });
+            //?
+
+            // return ListView(
+            //   children: [
+            //     ...wheelDataList.map((e) {
+            //       return Container(
+            //         child: Text(e.wheelRev.toString()),
+            //       );
+            //     }).toList()
+            //   ],
+            // );
+//? 배터리 체크용이었나?
+            // return ListView.builder(
+            //     itemCount: sensorData.length,
+            //     itemBuilder: (ctx, index) {
+            //       return ListTile(
+            //         title: Column(
+            //           children: [
+            //             Center(
+            //                 child: Text(
+            //               "Get",
+            //               style: TextStyle(
+            //                   fontSize: 18.0, fontWeight: FontWeight.bold),
+            //             )),
+            //             Divider(thickness: 8.0),
+            //             Center(
+            //                 child: Text(
+            //               // "Get.arguments last  ${temp.last}",
+            //               "sensorData last  ${sensorData.last ?? ""}",
+            //               style: TextStyle(
+            //                   color: Colors.blue,
+            //                   fontSize: 15.0,
+            //                   fontWeight: FontWeight.bold),
+            //             )),
+            //             SizedBox(height: 20.0),
+            //             Row(
+            //               mainAxisAlignment: MainAxisAlignment.center,
+            //               children: <Widget>[
+            //                 Text("Wheel_Rev : ${wheelModel.wheelRev}"),
+            //                 // Text("  "),
+            //                 SizedBox(
+            //                   width: 10.0,
+            //                 ),
+            //                 Text("Wheel_Last_event : ${wheelModel.wheelMs}"),
+            //               ],
+            //             ),
+            //             FlatButton(
+            //                 onPressed: () async {
+            //                   await bluetoothAnalysis.batteryCheck();
+            //                 },
+            //                 color: Colors.green,
+            //                 shape: new RoundedRectangleBorder(
+            //                     borderRadius: new BorderRadius.circular(30.0)),
+            //                 child: Text(
+            //                     "battery : ${_bluetoothController?.sensorBatteryData?.length > 0 ? _bluetoothController.sensorBatteryData.last.toString() : "Check"} %"))
+            //           ],
+            //         ),
+            //       );
+            //     });
 
             return Column(
               children: [
@@ -163,10 +210,15 @@ class _DetailScreenState extends State<DetailScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Wheel_Rev : $wheel_rev"),
-                    Text("Wheel_ms : $wheel_ms"),
+                    Text("Wheel_Rev : ${wheelDataList?.last?.wheelRev ?? 0}"),
+                    Text("  "),
+                    Text(
+                        "Wheel_Latency : ${wheelDataList?.last?.wheelLatencyMs ?? 0}"),
                   ],
                 ),
+                Text("Wheel_M/S : ${wheelVMs ?? 0}m/s"),
+                Text("Wheel_Km/H : ${wheelVKmh ?? 0}km/h"),
+                Text("Distence : ${wheelDis ?? 0}m"),
                 // FlatButton(
                 //     onPressed: () {
                 //       velocityData();
