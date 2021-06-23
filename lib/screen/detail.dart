@@ -4,7 +4,7 @@ import 'package:flutter_blue_project/model/wheel_model.dart';
 import 'package:flutter_blue_project/view_model/bluetooth_controller.dart';
 import 'package:get/get.dart';
 import 'package:hex/hex.dart';
-
+import 'package:flutter_speedometer/flutter_speedometer.dart';
 import '../convert.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -94,6 +94,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
           title: Text("detail"),
@@ -113,6 +114,11 @@ class _DetailScreenState extends State<DetailScreen> {
             var wheelVKmh =
                 wheelVKm?.value?.toStringAsFixed(1); //! 최종 속도값, km/h 출력되는 값
             var wheelDis = wheelDistence?.value?.toStringAsFixed(2);
+            print("object@@@@@@@@@@@@@@@@@ $wheelVKmh");
+            double wheelNkmhDouble = double.parse(wheelVKmh);
+            // int wheelNkmhInt = int.parse(wheelVKmh, radix: 10);
+            int wheelNkmhInt = wheelNkmhDouble.toInt();
+            print("2222222222222222222222222@ $wheelNkmhInt");
             // var wheelVMs = wheelVM?.value?.toInt() ?? 0; //! 최종 속도값, m/s 출력되는 값
             // var wheelVKmh =
             //     wheelVKm?.value?.toInt() ?? 0; //! 최종 속도값, km/h 출력되는 값
@@ -224,6 +230,18 @@ class _DetailScreenState extends State<DetailScreen> {
                 //       velocityData();
                 //     },
                 //     child: Text("thisButton"))
+
+                Speedometer(
+                  size: size.width / 2,
+                  minValue: 0,
+                  maxValue: 35,
+                  currentValue: wheelNkmhInt, // 현재 속도
+                  // currentValue: 76, // 현재 속도
+                  warningValue: 20,
+                  displayText: 'km/h',
+                  displayTextStyle: TextStyle(color: Colors.white),
+                  displayNumericStyle: TextStyle(color: Colors.white),
+                )
               ],
             );
           },
